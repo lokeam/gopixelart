@@ -5,11 +5,11 @@ Pixel Art Editor made in Golang.
 _In active development_
 
 ## Project Roadmap Features
-[ ] Create new files, save and load existing work
-[ ] Create and use custom Swatches (Palletes)
-[ ] Color picker
-[ ] Pan / Zoom image
-[ ] Pixel brush indicator
+- [ ] Create new files, save and load existing work
+- [ ] Create and use custom Swatches (Palletes)
+- [ ] Color picker
+- [ ] Pan / Zoom image
+- [ ] Pixel brush indicator
 
 ## How To Use
 In order to run this application, you'll need the following:
