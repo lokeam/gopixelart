@@ -4,6 +4,8 @@ import (
 	"image/color"
 	"sixam/gopixel/apptype"
 
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -29,4 +31,16 @@ func NewSwatch(state *apptype.State, color color.Color, swatchIndex int, clickHa
 	}
 	swatch.ExtendBaseWidget(swatch)
 	return swatch
+}
+
+func (swatch *Swatch) CreateRenderer() fyne.WidgetRenderer {
+	square := canvas.NewRectangle(swatch.Color)
+	objects := []fyne.CanvasObject{square}
+
+	return &SwatchRenderer{
+		square:  *square,
+		objects: objects,
+		parent:  swatch,
+	}
+
 }
