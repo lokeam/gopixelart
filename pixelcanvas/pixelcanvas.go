@@ -51,7 +51,7 @@ func NewBlankImage(cols, rows int, c color.Color) image.Image {
 	return img
 }
 
-func NewPixelCanvas(state *apptype.State, config apptype.PixelCanvasConfig) *PixcelCanvas {
+func NewPixelCanvas(state *apptype.State, config apptype.PixelCanvasConfig) *PixelCanvas {
 	pixelCanvas := &PixelCanvas{
 		PixelCanvasConfig: config,
 		appState:          state,

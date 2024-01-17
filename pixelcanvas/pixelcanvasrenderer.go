@@ -6,7 +6,7 @@ import (
 )
 
 type PixelCanvasRenderer struct {
-	PixelCanvas  *PixelCanvas
+	pixelCanvas  *PixelCanvas
 	canvasImage  *canvas.Image
 	canvasBorder []canvas.Line
 }
@@ -40,7 +40,7 @@ func (renderer *PixelCanvasRenderer) Layout(size fyne.Size) {
 // Refresh - checks if we need to reload the image
 func (renderer *PixelCanvasRenderer) Refresh() {
 	if renderer.pixelCanvas.reloadImage {
-		renderer.canvasImage = renderer.NewImageFromImage(renderer.pixelCanvas.PixelData)
+		renderer.canvasImage = canvas.NewImageFromImage(renderer.pixelCanvas.PixelData)
 		// change out image is scaled, smooth or pixel
 		renderer.canvasImage.ScaleMode = canvas.ImageScalePixels
 		renderer.canvasImage.FillMode = canvas.ImageFillContain
@@ -57,7 +57,7 @@ func (renderer *PixelCanvasRenderer) LayoutCanvas(size fyne.Size) {
 	pixelSize := renderer.pixelCanvas.PixelSize
 
 	// Allow panning and zoom into pixels for ease of editing
-	renderer.canvasImage.Move(fyne.NewPos(renderer.PixelCanvas.CanvasOffset.X, renderer.pixelCanvas.CanvasOffset.Y))
+	renderer.canvasImage.Move(fyne.NewPos(renderer.pixelCanvas.CanvasOffset.X, renderer.pixelCanvas.CanvasOffset.Y))
 	renderer.canvasImage.Resize(fyne.NewSize(float32(imagePixelWidth*pixelSize), float32(imagePixelHeight*pixelSize)))
 }
 
@@ -84,5 +84,3 @@ func (renderer *PixelCanvasRenderer) LayoutBorder(size fyne.Size) {
 	bottom.Position1 = fyne.NewPos(offset.X+imageWidth, offset.Y)
 	bottom.Position2 = fyne.NewPos(offset.X+imageWidth, offset.Y+imageHeight)
 }
-
-func (renderer *PixelCanvasRenderer) Layout(size fyne.Size) {}
