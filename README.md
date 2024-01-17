@@ -1,5 +1,5 @@
 # GoPixelArt
-Pixel Art Editor made in Golang.
+Pixel Art Editor made in Golang. Uses the [Fyne](https://fyne.io/) toolkit for Widget and Canvas manipulation.
 
 ## Project Status - 25%
 _In active development_
@@ -7,7 +7,7 @@ _In active development_
 ## Project Roadmap Features
 - [ ] Create new files, save and load existing work
 - [ ] Create and use custom Swatches (Palletes)
-- [ ] Color picker
+- [X] Color picker
 - [ ] Pan / Zoom image
 - [ ] Pixel brush indicator
 
