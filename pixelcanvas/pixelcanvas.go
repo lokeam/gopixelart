@@ -6,7 +6,8 @@ import (
 	"sixam/gopixel/apptype"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/widget"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/widget"
 )
 
 type PixelCanvasMouseState struct {
@@ -17,16 +18,17 @@ type PixelCanvas struct {
 	widget.BaseWidget
 	apptype.PixelCanvasConfig
 	renderer    *PixelCanvasRenderer
+	PixelData   image.Image
 	mouseState  PixelCanvasMouseState
 	appState    *apptype.State
 	reloadImage bool
 }
 
-func (PixelCanvas *PixelCanvas) Bounds() image.Rectangle {
+func (pixelCanvas *PixelCanvas) Bounds() image.Rectangle {
 	x0 := int(pixelCanvas.CanvasOffset.X)
 	y0 := int(pixelCanvas.CanvasOffset.Y)
-	x1 := int(pixelCanvas.PixelCols*pixelCanvas.PixelSize + int(PixelCanvas.CanvasOffset.X))
-	y1 := int(pixelCanvas.PixelRows*pixelCanvas.PixelSize + int(PixelCanvas.CanvasOffset.Y))
+	x1 := int(pixelCanvas.PixelCols*pixelCanvas.PixelSize + int(pixelCanvas.CanvasOffset.X))
+	y1 := int(pixelCanvas.PixelRows*pixelCanvas.PixelSize + int(pixelCanvas.CanvasOffset.Y))
 	return image.Rect(x0, y0, x1, y1)
 }
 
@@ -59,4 +61,27 @@ func NewPixelCanvas(state *apptype.State, config apptype.PixelCanvasConfig) *Pix
 	pixelCanvas.PixelData = NewBlankImage(pixelCanvas.PixelCols, pixelCanvas.PixelRows, color.NRGBA{128, 128, 128, 255})
 	pixelCanvas.ExtendBaseWidget(pixelCanvas)
 	return pixelCanvas
+}
+
+func (pixelCanvas *PixelCanvas) CreateRenderer() fyne.WidgetRenderer {
+	canvasImage := canvas.NewImageFromImage(pixelCanvas.PixelData)
+	canvasImage.ScaleMode = canvas.ImageScalePixels
+	canvasImage.FillMode = canvas.ImageFillContain
+
+	canvasBorder := make([]canvas.Line, 4)
+
+	// set defaults for pixel canvas borders
+	for i := 0; i < len(canvasBorder); i++ {
+		// dark gray canvas border
+		canvasBorder[i].StrokeColor = color.NRGBA{100, 100, 100, 255}
+		canvasBorder[i].StrokeWidth = 2
+	}
+
+	renderer := &PixelCanvasRenderer{
+		pixelCanvas:  pixelCanvas,
+		canvasImage:  canvasImage,
+		canvasBorder: canvasBorder,
+	}
+	pixelCanvas.renderer = renderer
+	return renderer
 }
