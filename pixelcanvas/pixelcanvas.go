@@ -7,6 +7,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -84,4 +85,14 @@ func (pixelCanvas *PixelCanvas) CreateRenderer() fyne.WidgetRenderer {
 	}
 	pixelCanvas.renderer = renderer
 	return renderer
+}
+
+// Attempt to pan using the scroll wheel
+// Left click: primary
+// Right click: secondary
+// Scroll wheel: tertiary
+func (pixelCanvas *PixelCanvas) TryToPan(previousCoordinate *fyne.PointEvent, ev *desktop.MouseEvent) {
+	if previousCoordinate != nil && ev.Button == desktop.MouseButtonTertiary {
+		pixelCanvas.Pan(*previousCoordinate, ev.PointEvent)
+	}
 }
