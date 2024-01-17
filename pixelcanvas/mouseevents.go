@@ -1,6 +1,8 @@
 package pixelcanvas
 
 import (
+	"sixam/gopixel/pixelcanvas/brush"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -20,3 +22,10 @@ func (pixelCanvas *PixelCanvas) MouseMoved(ev *desktop.MouseEvent) {
 }
 func (pixelCanvas *PixelCanvas) MouseIn(ev *desktop.MouseEvent) {}
 func (pixelCanvas *PixelCanvas) MouseOut()                      {}
+
+// Mousable Interface
+func (pixelCanvas *PixelCanvas) MouseDown(ev *desktop.MouseEvent) {
+	brush.TryBrush(pixelCanvas.appState, pixelCanvas, ev)
+}
+
+func (PixelCanvas *PixelCanvas) MouseUp(ev *desktop.MouseEvent) {}

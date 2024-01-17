@@ -96,3 +96,34 @@ func (pixelCanvas *PixelCanvas) TryToPan(previousCoordinate *fyne.PointEvent, ev
 		pixelCanvas.Pan(*previousCoordinate, ev.PointEvent)
 	}
 }
+
+// Brushable interface
+func (pixelCanvas *PixelCanvas) SetColor(c color.Color, x, y int) {
+
+	// need to check file format before setting pixel color
+	if nrgba, ok := pixelCanvas.PixelData.(*image.NRGBA); ok {
+		nrgba.Set(x, y, c)
+	}
+	if rgba, ok := pixelCanvas.PixelData.(*image.RGBA); ok {
+		rgba.Set(x, y, c)
+	}
+	pixelCanvas.Refresh()
+}
+
+// Check if moused over canvas
+func (pixelCanvas *PixelCanvas) MouseToCanvasXY(ev *desktop.MouseEvent) (*int, *int) {
+	bounds := pixelCanvas.Bounds()
+	if !InBounds(ev.Position, bounds) {
+		return nil, nil
+	}
+
+	pixelSize := float32(pixelCanvas.PixelSize)
+	xOffset := pixelCanvas.CanvasOffset.X
+	yOffset := pixelCanvas.CanvasOffset.Y
+
+	// Get pixel points within image
+	x := int((ev.Position.X - xOffset) / pixelSize)
+	y := int((ev.Position.Y - yOffset) / pixelSize)
+
+	return &x, &y
+}
