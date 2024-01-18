@@ -1,14 +1,52 @@
 package brush
 
 import (
+	"image/color"
 	"sixam/gopixel/apptype"
 
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
 const (
 	Pixel = iota
 )
+
+func Cursor(config apptype.PixelCanvasConfig, brush apptype.BrushType, ev *desktop.MouseEvent, x int, y int) []fyne.CanvasObject {
+	var objects []fyne.CanvasObject
+	switch {
+	case brush == Pixel:
+		pixelSize := float32(config.PixelSize)
+		xOrigin := (float32(x) * pixelSize) + config.CanvasOffset.X
+		yOrigin := (float32(x) * pixelSize) + config.CanvasOffset.Y
+
+		cursorColor := color.NRGBA{80, 80, 80, 255}
+
+		left := canvas.NewLine(cursorColor)
+		left.StrokeWidth = 3
+		left.Position1 = fyne.NewPos(xOrigin, yOrigin)
+		left.Position2 = fyne.NewPos(xOrigin, yOrigin+pixelSize)
+
+		top := canvas.NewLine(cursorColor)
+		top.StrokeWidth = 3
+		top.Position1 = fyne.NewPos(xOrigin, yOrigin)
+		top.Position2 = fyne.NewPos(xOrigin+pixelSize, yOrigin)
+
+		right := canvas.NewLine(cursorColor)
+		right.StrokeWidth = 3
+		right.Position1 = fyne.NewPos(xOrigin+pixelSize, yOrigin)
+		right.Position2 = fyne.NewPos(xOrigin+pixelSize, yOrigin+pixelSize)
+
+		bottom := canvas.NewLine(cursorColor)
+		bottom.StrokeWidth = 3
+		bottom.Position1 = fyne.NewPos(xOrigin, yOrigin+pixelSize)
+		bottom.Position2 = fyne.NewPos(xOrigin+pixelSize, yOrigin+pixelSize)
+
+		objects = append(objects, left, top, right, bottom)
+	}
+	return objects
+}
 
 // Separate out TryBrush and TryToPaint so that we may add new brushes later
 func TryBrush(appState *apptype.State, canvas apptype.Brushable, ev *desktop.MouseEvent) bool {

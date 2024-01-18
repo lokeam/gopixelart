@@ -15,6 +15,15 @@ func (pixelCanvas *PixelCanvas) Scrolled(ev *fyne.ScrollEvent) {
 
 // Hoverable interface
 func (pixelCanvas *PixelCanvas) MouseMoved(ev *desktop.MouseEvent) {
+	// if the mouse is somewhere over the canvas, draw a cursor
+	if x, y := pixelCanvas.MouseToCanvasXY(ev); x != nil && y != nil {
+		brush.TryBrush(pixelCanvas.appState, pixelCanvas, ev)
+		cursor := brush.Cursor(pixelCanvas.PixelCanvasConfig, pixelCanvas.appState.BrushType, ev, *x, *y)
+		pixelCanvas.renderer.SetCursor(cursor)
+	} else {
+		pixelCanvas.renderer.SetCursor(make([]fyne.CanvasObject, 0))
+	}
+
 	pixelCanvas.TryToPan(pixelCanvas.mouseState.previousCoordinate, ev)
 	pixelCanvas.Refresh()
 	pixelCanvas.mouseState.previousCoordinate = &ev.PointEvent
