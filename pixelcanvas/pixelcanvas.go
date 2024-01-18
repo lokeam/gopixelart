@@ -133,17 +133,16 @@ func (pixelCanvas *PixelCanvas) LoadImage(img image.Image) {
 
 	pixelCanvas.PixelCanvasConfig.PixelCols = dimensions.Dx()
 	pixelCanvas.PixelCanvasConfig.PixelRows = dimensions.Dy()
+
 	pixelCanvas.PixelData = img
 	pixelCanvas.reloadImage = true
 	pixelCanvas.Refresh()
 }
 
 func (pixelCanvas *PixelCanvas) NewDrawing(cols, rows int) {
-	// avoid using an existing image path and overwrite file
 	pixelCanvas.appState.SetFilePath("")
 	pixelCanvas.PixelCols = cols
 	pixelCanvas.PixelRows = rows
 	pixelData := NewBlankImage(cols, rows, color.NRGBA{128, 128, 128, 255})
 	pixelCanvas.LoadImage(pixelData)
-
 }
