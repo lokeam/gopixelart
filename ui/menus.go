@@ -2,8 +2,10 @@ package ui
 
 import (
 	"errors"
+	"image"
 	"image/png"
 	"os"
+	"sixam/gopixel/util"
 	"strconv"
 
 	"fyne.io/fyne/v2"
@@ -111,9 +113,41 @@ func BuildMenus(app *AppInit) *fyne.Menu {
 	return fyne.NewMenu(
 		"File",
 		BuildNewMenu(app),
+		BuildOpenMenu(app),
 		BuildSaveMenu(app),
 		BuildSaveAsMenu(app),
 	)
+}
+
+func BuildOpenMenu(app *AppInit) *fyne.MenuItem {
+	return fyne.NewMenuItem("Open", func() {
+		dialog.ShowFileOpen(func(uri fyne.URIReadCloser, e error) {
+			if uri == nil {
+				return
+			} else {
+				image, _, err := image.Decode(uri)
+
+				if err != nil {
+					dialog.ShowError(err, app.PixelWindow)
+					return
+				}
+
+				app.PixelCanvas.LoadImage(image)
+				app.State.SetFilePath(uri.URI().Path())
+				imgColors := util.GetImageColors(image)
+				i := 0
+
+				// Populate color swatch with image colors
+				for c := range imgColors {
+					if i == len(app.Swatches) {
+						break
+					}
+					app.Swatches[i].SetColor(c)
+					i++
+				}
+			}
+		}, app.PixelWindow)
+	})
 }
 
 func SetupMenus(app *AppInit) {
